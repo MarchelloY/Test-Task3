@@ -9,17 +9,19 @@ public class MyItem : MonoBehaviour,
     IPointerEnterHandler,
     IPointerExitHandler,
     IDragHandler,
-    IEndDragHandler
+    IEndDragHandler,
+    IBeginDragHandler
 {
     [SerializeField] private Image image;
 
     private float _cost;
+    private Vector3 _startDragPos;
     
     private event Action OnPlanetClick;
     
     public void OnPointerClick(PointerEventData eventData)
     {
-        OnPlanetClick?.Invoke();
+        //OnPlanetClick?.Invoke();
         //image.DOColor(Color.clear, 0.3f);
     }
 
@@ -49,6 +51,11 @@ public class MyItem : MonoBehaviour,
 
     public void OnEndDrag(PointerEventData eventData)
     {
-        var posCursor = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        image.transform.DOMove(_startDragPos, 0.5f);
+    }
+
+    public void OnBeginDrag(PointerEventData eventData)
+    {
+        _startDragPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
     }
 }
